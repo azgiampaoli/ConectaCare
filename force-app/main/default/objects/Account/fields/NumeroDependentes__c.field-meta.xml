@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NumeroDependentes__c</fullName>
+    <description>Número de Dependentes</description>
+    <label>Número de Dependentes</label>
+    <summaryFilterItems>
+        <field>Dependente__c.Ativo__c</field>
+        <operation>equals</operation>
+        <value>True</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Dependente__c.Account__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <type>Summary</type>
+</CustomField>
