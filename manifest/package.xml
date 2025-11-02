@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>*</members>
-		<name>BrandingSet</name>
+		<members>ViaCepService</members>
+		<members>ViaCepServiceTest</members>
+		<name>ApexClass</name>
 	</types>
 	<types>
-		<members>ConectaCare</members>
-		<name>CustomApplication</name>
+		<members>ViaCepExt</members>
+		<name>ExternalCredential</name>
 	</types>
 	<types>
-		<members>Account</members>
-		<members>Dependente__c</members>
-		<name>CustomObject</name>
+		<members>ViaCep</members>
+		<name>NamedCredential</name>
 	</types>
 	<types>
-		<members>*</members>
-		<name>LightningExperienceTheme</name>
+		<members>All</members>
+		<name>PermissionSet</name>
 	</types>
 	<version>65.0</version>
 </Package>
