@@ -1,0 +1,112 @@
+<template>
+    <lightning-card title="Cadastro">
+        <!-- Etapa 1: Escolher tipo -->
+        <template if:false={tipoSelecionado}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-button label="Cadastrar Cliente" variant="brand" onclick={handleCliente}></lightning-button>
+                <lightning-button label="Cadastrar Dependente" class="slds-m-left_small" onclick={handleDependente}></lightning-button>
+            </div>
+        </template>
+
+        <!-- Etapa 2: Formulário Cliente -->
+        <template if:true={isCliente}>
+            <div class="slds-grid slds-wrap slds-p-around_medium">
+
+                <!-- Coluna 1 -->
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
+                    <lightning-input label="Nome" value={nome} onchange={handleChange} data-field="nome"></lightning-input>
+                    <lightning-input label="Data de Nascimento" type="date" value={dataNascimento} onchange={handleChange} data-field="dataNascimento"></lightning-input>
+                    <lightning-input label="CEP" value={cep} onchange={handleCepChange} data-field="cep"></lightning-input>
+                    <lightning-input label="Número/Apartamento" value={numero} onchange={handleChange} data-field="numero"></lightning-input>
+                    <lightning-input label="Cidade" value={cidade} onchange={handleChange} data-field="cidade"></lightning-input>
+                </div>
+
+                <!-- Coluna 2 -->
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
+                    <lightning-input label="Email" type="email" value={email} onchange={handleChange} data-field="email"></lightning-input>
+                    <lightning-input
+                        label="Telefone"
+                        value={telefone}
+                        onchange={handleTelefoneChange}
+                        placeholder="(11) 99999-9999"
+                        maxlength="15">
+                    </lightning-input>
+                    <lightning-input label="Logradouro" value={logradouro} onchange={handleChange} data-field="logradouro"></lightning-input>
+                    <lightning-input label="Bairro" value={bairro} onchange={handleChange} data-field="bairro"></lightning-input>
+                    <lightning-input label="Estado" value={estado} onchange={handleChange} data-field="estado"></lightning-input>
+                </div>
+
+                <!-- Campo de descrição em largura total -->
+                <div class="slds-col slds-size_1-of-1 slds-p-horizontal_small">
+                    <lightning-textarea
+                        label="Descrição"
+                        value={descricao}
+                        onchange={handleDescricaoChange}
+                        placeholder="Digite observações sobre o titular...">
+                    </lightning-textarea>
+                </div>
+            </div>
+
+            <div class="slds-m-top_medium slds-text-align_center">
+                <lightning-button variant="brand" label="Salvar Cliente" onclick={salvarCliente}></lightning-button>
+                <lightning-button label="Voltar" class="slds-m-left_small" onclick={resetTela}></lightning-button>
+            </div>
+        </template>
+
+        <!-- Etapa 2: Formulário Dependente -->
+        <template if:true={isDependente}>
+            <div class="slds-grid slds-wrap slds-p-around_medium">
+
+                <!-- Lookup -->
+                <div class="slds-col slds-size_1-of-1 slds-p-horizontal_small">
+                    <lightning-record-edit-form object-api-name="Dependente__c">
+                        <lightning-input-field 
+                            field-name="Account__c"
+                            label="Selecionar Titular"
+                            onchange={handleLookupChange}>
+                        </lightning-input-field>
+                    </lightning-record-edit-form>
+                </div>
+
+                <!-- Coluna 1 -->
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
+                    <lightning-input label="Nome" value={nome} onchange={handleChange} data-field="nome"></lightning-input>
+                    <lightning-input label="Data de Nascimento" type="date" value={dataNascimento} onchange={handleChange} data-field="dataNascimento"></lightning-input>
+                    <lightning-input label="CEP" value={cep} onchange={handleCepChange} data-field="cep"></lightning-input>
+                    <lightning-input label="Número/Apartamento" value={numero} onchange={handleChange} data-field="numero"></lightning-input>
+                    <lightning-input label="Cidade" value={cidade} onchange={handleChange} data-field="cidade"></lightning-input>
+                </div>
+
+                <!-- Coluna 2 -->
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
+                    <lightning-input label="Email" type="email" value={email} onchange={handleChange} data-field="email"></lightning-input>
+                    <lightning-input
+                        label="Telefone"
+                        value={telefone}
+                        onchange={handleTelefoneChange}
+                        placeholder="(11) 99999-9999"
+                        maxlength="15">
+                    </lightning-input>
+                    <lightning-input label="Logradouro" value={logradouro} onchange={handleChange} data-field="logradouro"></lightning-input>
+                    <lightning-input label="Bairro" value={bairro} onchange={handleChange} data-field="bairro"></lightning-input>
+                    <lightning-input label="Estado" value={estado} onchange={handleChange} data-field="estado"></lightning-input>
+                </div>
+
+                <!-- Campo de descrição -->
+                <div class="slds-col slds-size_1-of-1 slds-p-horizontal_small">
+                    <lightning-textarea
+                        label="Descrição"
+                        value={descricao}
+                        onchange={handleDescricaoChange}
+                        placeholder="Digite observações sobre o dependente...">
+                    </lightning-textarea>
+                </div>
+            </div>
+
+            <div class="slds-m-top_medium slds-text-align_center">
+                <lightning-button variant="brand" label="Salvar Dependente" onclick={salvarDependente}></lightning-button>
+                <lightning-button label="Voltar" class="slds-m-left_small" onclick={resetTela}></lightning-button>
+            </div>
+        </template>
+    </lightning-card>
+</template>
