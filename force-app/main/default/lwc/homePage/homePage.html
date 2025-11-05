@@ -1,0 +1,28 @@
+<template>
+    <lightning-card title="Central de Atendimento" icon-name="standard:contact_list">
+        <div class="button-container">
+            <lightning-button label="Cadastro de Cliente" onclick={handleShowCadastro}></lightning-button>
+            <lightning-button label="Buscar Clientes" onclick={handleShowBusca}></lightning-button>
+            <lightning-button label="Abertura de Chamado" onclick={handleShowAbertura}></lightning-button>
+            <lightning-button label="Listar e Atualizar Chamados" onclick={handleShowLista}></lightning-button>
+        </div>
+
+        <div class="content-container">
+            <template if:true={isCadastro}>
+                <c-cadastro-cliente></c-cadastro-cliente>
+            </template>
+
+            <template if:true={isBusca}>
+                <c-buscar-clientes></c-buscar-clientes>
+            </template>
+
+            <template if:true={isAbertura}>
+                <c-abertura-chamado></c-abertura-chamado>
+            </template>
+
+            <template if:true={isLista}>
+                <c-lista-chamados></c-lista-chamados>
+            </template>
+        </div>
+    </lightning-card>
+</template>
