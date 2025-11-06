@@ -1,5 +1,21 @@
 <template>
-    <lightning-card title="Buscar Clientes">
-        <p class="slds-p-around_medium">Aqui vai a busca de clientes.</p>
+    <lightning-card title="Buscar Cliente ou Dependente">
+        <div class="slds-p-around_medium">
+            <lightning-input 
+                type="search" 
+                label="Buscar por nome ou CPF" 
+                value={searchTerm} 
+                onchange={handleSearchChange}>
+            </lightning-input>
+        </div>
+
+        <template if:true={results}>
+            <lightning-datatable 
+                key-field="Id"
+                data={results}
+                columns={columns}
+                onrowaction={handleRowAction}>
+            </lightning-datatable>
+        </template>
     </lightning-card>
 </template>

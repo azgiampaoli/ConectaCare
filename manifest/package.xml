@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
+		<members>BuscaClienteController</members>
 		<members>CadastroClienteController</members>
 		<name>ApexClass</name>
 	</types>
@@ -10,7 +11,8 @@
 		<name>CustomObject</name>
 	</types>
 	<types>
-		<members>*</members>
+		<members>buscarClientes</members>
+		<members>cadastroCliente</members>
 		<name>LightningComponentBundle</name>
 	</types>
 	<version>65.0</version>

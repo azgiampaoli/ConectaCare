@@ -50,8 +50,14 @@ export default class CadastroCliente extends LightningElement {
     handleDescricaoChange(event) {
         this.descricao = event.target.value;
     }
+
+    handleCpfChange(event) {
+    // remove tudo que não é número
+    let valor = event.target.value.replace(/\D/g, '');
+    this.cpf = valor;
+    }
   
-      handleTelefoneChange(event) {
+    handleTelefoneChange(event) {
         // remove tudo que não é número
         let valor = event.target.value.replace(/\D/g, ''); 
         //limita para 11 digitos (DDD + 9 digitos)
@@ -94,6 +100,7 @@ export default class CadastroCliente extends LightningElement {
             
             await salvarAccount({
                 nome: this.nome,
+                cpf: this.cpf,
                 email: this.email,
                 cep: this.cep,
                 dataNascimento: this.dataNascimento,
@@ -118,6 +125,7 @@ export default class CadastroCliente extends LightningElement {
 
             await salvarDependente({
                 nome: this.nome,
+                cpf: this.cpf,
                 email: this.email,
                 dataNascimento: this.dataNascimento,
                 telefone: this.telefone,
@@ -144,6 +152,7 @@ export default class CadastroCliente extends LightningElement {
         this.isCliente = false;
         this.isDependente = false;
         this.nome = '';
+        this.cpf = '';
         this.email = '';
         this.telefone = '';
         this.cep = '';
