@@ -19,9 +19,10 @@ public with sharing class CadastroClienteController {
     }
     // Método para salvar um novo Account (Cliente)
     @AuraEnabled
-    public static void salvarAccount(String nome, String email, String telefone, String logradouro, String numero, String cep, String bairro, String cidade, String estado, Date dataNascimento, String descricao) {
+    public static void salvarAccount(String nome, String cpf, String email, String telefone, String logradouro, String numero, String cep, String bairro, String cidade, String estado, Date dataNascimento, String descricao) {
         Account acc = new Account();
         acc.Name = nome;
+        acc.CPF__c = cpf;
         acc.Email__c = email;
         acc.Telefone__c = telefone;
         acc.Logradouro__c = logradouro; 
@@ -38,9 +39,10 @@ public with sharing class CadastroClienteController {
     }
     // Método para salvar um novo Dependente__c relacionado a um Account
     @AuraEnabled
-    public static void salvarDependente(String nome, String email, String telefone, String logradouro, String numero, String bairro, String cep, String cidade, String estado,  Date dataNascimento, String descricao, Id accountId) {
+    public static void salvarDependente(String nome, String cpf, String email, String telefone, String logradouro, String numero, String bairro, String cep, String cidade, String estado,  Date dataNascimento, String descricao, Id accountId) {
         Dependente__c dep = new Dependente__c();
-        dep.Name = nome;        
+        dep.Name = nome; 
+        dep.CPF__c = cpf;       
         dep.Email__c = email;
         dep.Telefone__c = telefone;
         dep.Logradouro__c = logradouro;

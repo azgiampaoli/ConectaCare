@@ -15,14 +15,14 @@
                 <!-- Coluna 1 -->
                 <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
                     <lightning-input label="Nome" value={nome} onchange={handleChange} data-field="nome"></lightning-input>
+                    <lightning-input
+                        label="CPF"
+                        value={cpf}
+                        maxlength="11"
+                        onchange={handleCpfChange}
+                        data-field="cpf"
+                    ></lightning-input>
                     <lightning-input label="Data de Nascimento" type="date" value={dataNascimento} onchange={handleChange} data-field="dataNascimento"></lightning-input>
-                    <lightning-input label="CEP" value={cep} onchange={handleCepChange} data-field="cep"></lightning-input>
-                    <lightning-input label="Número/Apartamento" value={numero} onchange={handleChange} data-field="numero"></lightning-input>
-                    <lightning-input label="Cidade" value={cidade} onchange={handleChange} data-field="cidade"></lightning-input>
-                </div>
-
-                <!-- Coluna 2 -->
-                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
                     <lightning-input label="Email" type="email" value={email} onchange={handleChange} data-field="email"></lightning-input>
                     <lightning-input
                         label="Telefone"
@@ -31,8 +31,16 @@
                         placeholder="(11) 99999-9999"
                         maxlength="15">
                     </lightning-input>
+                </div>
+
+                <!-- Coluna 2 -->
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
+                    
+                    <lightning-input label="CEP" value={cep} onchange={handleCepChange} data-field="cep"></lightning-input>
                     <lightning-input label="Logradouro" value={logradouro} onchange={handleChange} data-field="logradouro"></lightning-input>
+                    <lightning-input label="Número/Apartamento" value={numero} onchange={handleChange} data-field="numero"></lightning-input>
                     <lightning-input label="Bairro" value={bairro} onchange={handleChange} data-field="bairro"></lightning-input>
+                    <lightning-input label="Cidade" value={cidade} onchange={handleChange} data-field="cidade"></lightning-input>
                     <lightning-input label="Estado" value={estado} onchange={handleChange} data-field="estado"></lightning-input>
                 </div>
 
@@ -71,15 +79,15 @@
                 <!-- Coluna 1 -->
                 <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
                     <lightning-input label="Nome" value={nome} onchange={handleChange} data-field="nome"></lightning-input>
+                     <lightning-input
+                        label="CPF"
+                        value={cpf}
+                        maxlength="11"
+                        onchange={handleCpfChange}
+                        data-field="cpf"
+                    ></lightning-input>
                     <lightning-input label="Data de Nascimento" type="date" value={dataNascimento} onchange={handleChange} data-field="dataNascimento"></lightning-input>
-                    <lightning-input label="CEP" value={cep} onchange={handleCepChange} data-field="cep"></lightning-input>
-                    <lightning-input label="Número/Apartamento" value={numero} onchange={handleChange} data-field="numero"></lightning-input>
-                    <lightning-input label="Cidade" value={cidade} onchange={handleChange} data-field="cidade"></lightning-input>
-                </div>
-
-                <!-- Coluna 2 -->
-                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
-                    <lightning-input label="Email" type="email" value={email} onchange={handleChange} data-field="email"></lightning-input>
+                     <lightning-input label="Email" type="email" value={email} onchange={handleChange} data-field="email"></lightning-input>
                     <lightning-input
                         label="Telefone"
                         value={telefone}
@@ -87,8 +95,15 @@
                         placeholder="(11) 99999-9999"
                         maxlength="15">
                     </lightning-input>
+                </div>
+
+                <!-- Coluna 2 -->
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small"> 
+                    <lightning-input label="CEP" value={cep} onchange={handleCepChange} data-field="cep"></lightning-input>
                     <lightning-input label="Logradouro" value={logradouro} onchange={handleChange} data-field="logradouro"></lightning-input>
+                    <lightning-input label="Número/Apartamento" value={numero} onchange={handleChange} data-field="numero"></lightning-input>
                     <lightning-input label="Bairro" value={bairro} onchange={handleChange} data-field="bairro"></lightning-input>
+                    <lightning-input label="Cidade" value={cidade} onchange={handleChange} data-field="cidade"></lightning-input>
                     <lightning-input label="Estado" value={estado} onchange={handleChange} data-field="estado"></lightning-input>
                 </div>
 
