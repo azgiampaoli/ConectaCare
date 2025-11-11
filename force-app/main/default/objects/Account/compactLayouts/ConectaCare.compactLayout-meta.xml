@@ -2,10 +2,9 @@
 <CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ConectaCare</fullName>
     <fields>Name</fields>
-    <fields>Type</fields>
-    <fields>Plano__c</fields>
+    <fields>SLA__c</fields>
     <fields>Phone</fields>
-    <fields>StatusPlano__c</fields>
-    <fields>VencimentoPlano__c</fields>
+    <fields>NumeroDependentes__c</fields>
+    <fields>Active__c</fields>
     <label>ConectaCare</label>
 </CompactLayout>

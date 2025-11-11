@@ -2,17 +2,20 @@ import { LightningElement, track } from 'lwc';
 import buscarCep from '@salesforce/apex/CadastroClienteController.buscarCep';
 import salvarAccount from '@salesforce/apex/CadastroClienteController.salvarAccount';
 import salvarDependente from '@salesforce/apex/CadastroClienteController.salvarDependente';
+import buscarPlanos from '@salesforce/apex/PlanosSaudeService.buscarPlanos';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class CadastroCliente extends LightningElement {
     @track tipoSelecionado = false;
     @track isCliente = false;
     @track isDependente = false;
+    @track isAbrirTelaPlano = false;
 
     @track nome;
     @track email;
     @track telefone;
     @track cep;
+    @track cpf;
     @track logradouro;
     @track numero;
     @track bairro;
@@ -21,11 +24,24 @@ export default class CadastroCliente extends LightningElement {
     @track dataNascimento;
     @track descricao;
     @track accountId;
+    @track tipoPlano;
+    @track valorMensalidade;
+    @track cobertura;
+    @track carencia;
 
     @track accounts = [];
     @track accountSearchKey = '';
     @track accountId = null;
     @track accountName = '';
+
+    @track planoOptions = [];
+    @track planos = [];
+    @track planoSelecionado;
+    @track selectedPlano;
+
+     connectedCallback() {
+        this.carregarPlanos();
+    }
 
     handleCliente() {
         this.tipoSelecionado = true;
@@ -35,6 +51,10 @@ export default class CadastroCliente extends LightningElement {
     handleDependente() {
         this.tipoSelecionado = true;
         this.isDependente = true;
+    }
+
+    handleAbrirTelaPlano() {
+        this.isAbrirTelaPlano = true;
     }
 
     handleChange(event) {
@@ -49,6 +69,10 @@ export default class CadastroCliente extends LightningElement {
 
     handleDescricaoChange(event) {
         this.descricao = event.target.value;
+    }
+
+    handleVoltar() {
+        this.dispatchEvent(new CustomEvent('voltar'));
     }
 
     handleCpfChange(event) {
@@ -94,7 +118,7 @@ export default class CadastroCliente extends LightningElement {
             }
         }
     }
-    //envia os dados para a classe apex salvar o cliente
+    //envia os dados para a classe apex salvar o cliente e o plano selecionado
     async salvarCliente() {
         try {
             
@@ -110,16 +134,22 @@ export default class CadastroCliente extends LightningElement {
                 bairro: this.bairro,
                 cidade: this.cidade,
                 estado: this.estado,
-                descricao: this.descricao
+                descricao: this.descricao,
+                tipoPlano: this.tipoPlano,
+                valorMensalidade: this.valorMensalidade,
+                cobertura: this.cobertura,
+                carencia: this.carencia        
+
             });
             console.log('telefone no titular :' + this.telefone);
             this.showToast('Sucesso', 'Cliente salvo com sucesso', 'success');
             this.resetTela();
+            this.isAbrirTelaPlano = false;
         } catch (error) {
             this.showToast('Erro', error.body.message, 'error');
         }
     }
-    //envia os dados para a classe apex salvar o dependente
+    //envia os dados para a classe apex salvar o dependente relacionado ao titular
     async salvarDependente() {
         try {
 
@@ -169,4 +199,52 @@ export default class CadastroCliente extends LightningElement {
     showToast(title, message, variant) {
         this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
     }
+//chamada assincrona para buscar os planos de saúde disponíveis no mock
+   async carregarPlanos() {
+    try {
+        const data = await buscarPlanos();
+
+        // Garante que o array está salvo corretamente
+        this.planos = [...data];
+
+        // Monta as opções do combobox
+        this.planoOptions = data.map(p => ({
+            label: p.tipoPlano,
+            value: p.tipoPlano
+        }));
+
+        console.log('Retorno Apex:', JSON.stringify(data));
+        console.log('Planos carregados:', JSON.stringify(this.planoOptions));
+    } catch (error) {
+        console.error(' Erro ao carregar planos:', error);
+    } finally {
+        console.log('Planos disponíveis:', JSON.stringify(this.planos));
+        console.log('Finalizou carregamento dos planos');
+    }
+}
+
+handlePlanoChange(event) {
+    this.selectedPlano = event.detail.value;
+    console.log('Plano selecionado:', this.selectedPlano);
+
+    // Verifica se o array existe antes de tentar acessar
+    if (!this.planos || this.planos.length === 0) {
+        console.error('Nenhum plano carregado antes da seleção');
+        return;
+    }
+
+    this.planoSelecionado = this.planos.find(p => p.tipoPlano === this.selectedPlano);
+    if (this.planoSelecionado) {
+            this.tipoPlano = this.planoSelecionado.tipoPlano;
+            this.valorMensalidade = this.planoSelecionado.valorMensalidade;
+            this.cobertura = this.planoSelecionado.cobertura;
+            this.carencia = this.planoSelecionado.carencia;
+        }
+
+    if (this.planoSelecionado) {
+        console.log('Detalhes do plano selecionado:', JSON.stringify(this.planoSelecionado));
+    } else {
+        console.error('Plano não encontrado no array:', this.selectedPlano);
+    }  
+}
 }
