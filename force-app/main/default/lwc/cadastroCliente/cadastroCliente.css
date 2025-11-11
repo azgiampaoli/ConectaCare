@@ -1,0 +1,8 @@
+.readonly-input lightning-input .slds-input[disabled],
+.readonly-input .slds-input[disabled] {
+    background-color: white !important;
+    border: 1px solid #d8dde6 !important;
+    color: #080707 !important;
+    opacity: 1 !important;
+    cursor: not-allowed !important;
+}
