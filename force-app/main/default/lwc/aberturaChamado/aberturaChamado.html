@@ -1,5 +1,115 @@
 <template>
-    <lightning-card title="Abertura de Chamado">
-        <p class="slds-p-around_medium">Aqui vai o formulário para abertura de chamado.</p>
+    <lightning-card title="Buscar Cliente / Dependente" icon-name="standard:account">
+        <div class="slds-p-around_medium">
+
+            <!-- Busca -->
+            <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-m-bottom_small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4">
+                    <lightning-input name="termo" label="CPF ou Nome" placeholder="Digite CPF ou nome" value={termo}
+                        onchange={handleChange} onkeyup={handleKeyUp}></lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-text-align_right">
+                    <lightning-button variant="brand" label="Buscar" onclick={buscarRegistros}></lightning-button>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <template if:true={isLoading}>
+                <div class="slds-text-align_center">
+                    <lightning-spinner alternative-text="Buscando..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Erro -->
+            <template if:true={mensagemErro}>
+                <div class="slds-text-color_error slds-m-bottom_small">{mensagemErro}</div>
+            </template>
+
+            <!-- Resultados -->
+            <template if:true={registros.length}>
+                <h3 class="slds-text-heading_small slds-m-top_medium">Resultados ({registros.length})</h3>
+
+                <div class="slds-m-top_small">
+                    <template for:each={registros} for:item="item" for:index="index">
+
+                        <!-- CARD DO CLIENTE / DEPENDENTE -->
+                        <div key={item.Id}
+                            class="slds-box slds-m-bottom_small result-card {item.isSelected ? 'selected-card' : ''}"
+                            data-index={index} onclick={handleSelectItem}>
+
+                            <!-- Dados cliente -->
+                            <div class="slds-grid slds-wrap slds-grid_align-spread">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <p class="slds-text-heading_small">{item.Nome}</p>
+                                    <p>CPF: {item.CPF}</p>
+                                    <p>Email: {item.Email}</p>
+                                    <p>Telefone: {item.Telefone}</p>
+                                </div>
+
+                                <!-- Dados plano -->
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <h3 class="slds-text-title_caps">Plano de Saúde - <strong>{item.Tipo}</strong></h3>
+
+                                    <p><strong>Plano:</strong> {item.NomePlano}</p>
+                                    <p><strong>Status:</strong> {item.StatusPlano}</p>
+                                    <p><strong>Cobertura:</strong> {item.Cobertura}</p>
+                                    <p><strong>Data Vencimento:</strong> {item.DataVencimento}</p>
+                                </div>
+                            </div>
+
+                            <!-- BOTÃO Aparece só quando selecionado -->
+                            <template if:true={item.isSelected}>
+                                <div class="slds-m-top_small slds-text-align_right">
+                                    <lightning-button variant="brand" label="Abrir Caso"
+                                        onclick={handleAbrirCaso}></lightning-button>
+                                </div>
+                            </template>
+
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:true={showModal}>
+                <section class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+
+                        <header class="slds-modal__header">
+                            <h2 class="slds-text-heading_medium">
+                                Abrir Caso para {clienteSelecionadoNome}
+                            </h2>
+                        </header>
+
+                        <div class="slds-modal__content slds-p-around_medium">
+                            <lightning-input label="Assunto" value={assunto} onchange={handleAssunto}></lightning-input>
+                            <lightning-combobox name="tipoAtendimento" label="Tipo de Atendimento"
+                                value={tipoAtendimento} options={opcoesTipo} onchange={handleTipo}
+                                class="slds-m-top_small"></lightning-combobox>
+                            <lightning-textarea label="Descrição" value={descricao} onchange={handleDescricao}
+                                min-length="0" max-length="1000" placeholder="Digite a descrição aqui..."
+                                class="slds-m-top_small"></lightning-textarea>
+                            
+                        </div>
+
+                        <footer class="slds-modal__footer">
+                            <lightning-button variant="neutral" label="Cancelar" onclick={fecharModal}
+                                disabled={salvando}></lightning-button>
+                            <lightning-button variant="brand" label="Criar Caso" onclick={handlecriarCaso}
+                                class="slds-m-left_small" disabled={salvando}></lightning-button>
+                        </footer>
+
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+
+            <!-- opcional: spinner global no modal -->
+            <template if:true={salvando}>
+                <div class="slds-spinner_container slds-spinner_container--center">
+                    <lightning-spinner alternative-text="Salvando..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+        </div>
     </lightning-card>
 </template>

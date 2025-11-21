@@ -44,8 +44,9 @@ public with sharing class CadastroClienteController {
         plano.Cobertura__c = cobertura;
         plano.Carencia__c =  Decimal.valueOf(carencia);
         plano.Account__c = acc.Id;
-        plano.Status__c = 'Sim';
         insert plano;
+        acc.SLA__c = plano.Name;
+        update acc;
     }
     // Método para salvar um novo Dependente__c relacionado a um Account e já setando o nome do plano baseado no titular
     @AuraEnabled
