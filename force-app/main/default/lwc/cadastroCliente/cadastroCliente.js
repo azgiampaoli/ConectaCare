@@ -1,4 +1,4 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track , wire} from 'lwc';
 import buscarCep from '@salesforce/apex/CadastroClienteController.buscarCep';
 import salvarAccount from '@salesforce/apex/CadastroClienteController.salvarAccount';
 import salvarDependente from '@salesforce/apex/CadastroClienteController.salvarDependente';
@@ -118,7 +118,7 @@ export default class CadastroCliente extends LightningElement {
             }
         }
     }
-    //envia os dados para a classe apex salvar o cliente e o plano selecionado
+    //envia os dados para a classe apex salvar o cliente
     async salvarCliente() {
         try {
             
@@ -149,7 +149,7 @@ export default class CadastroCliente extends LightningElement {
             this.showToast('Erro', error.body.message, 'error');
         }
     }
-    //envia os dados para a classe apex salvar o dependente relacionado ao titular
+    //envia os dados para a classe apex salvar o dependente
     async salvarDependente() {
         try {
 
@@ -199,7 +199,7 @@ export default class CadastroCliente extends LightningElement {
     showToast(title, message, variant) {
         this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
     }
-//chamada assincrona para buscar os planos de saúde disponíveis no mock
+
    async carregarPlanos() {
     try {
         const data = await buscarPlanos();
