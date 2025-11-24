@@ -4,7 +4,8 @@
         <template if:false={tipoSelecionado}>
             <div class="slds-p-around_medium slds-align_absolute-center">
                 <lightning-button label="Cadastrar Cliente" variant="brand" onclick={handleCliente}></lightning-button>
-                <lightning-button label="Cadastrar Dependente" class="slds-m-left_small" onclick={handleDependente}></lightning-button>
+                <lightning-button label="Cadastrar Dependente" class="slds-m-left_small"
+                    onclick={handleDependente}></lightning-button>
             </div>
         </template>
 
@@ -14,42 +15,39 @@
 
                 <!-- Coluna 1 -->
                 <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
-                    <lightning-input label="Nome" value={nome} onchange={handleChange} data-field="nome"></lightning-input>
-                    <lightning-input
-                        label="CPF"
-                        value={cpf}
-                        maxlength="11"
-                        onchange={handleCpfChange}
-                        data-field="cpf"
-                    ></lightning-input>
-                    <lightning-input label="Data de Nascimento" type="date" value={dataNascimento} onchange={handleChange} data-field="dataNascimento"></lightning-input>
-                    <lightning-input label="Email" type="email" value={email} onchange={handleChange} data-field="email"></lightning-input>
-                    <lightning-input
-                        label="Telefone"
-                        value={telefone}
-                        onchange={handleTelefoneChange}
-                        placeholder="(11) 99999-9999"
-                        maxlength="15">
+                    <lightning-input label="Nome" value={nome} onchange={handleChange}
+                        data-field="nome"></lightning-input>
+                    <lightning-input label="CPF" value={cpf} maxlength="11" onchange={handleCpfChange}
+                        data-field="cpf"></lightning-input>
+                    <lightning-input label="Data de Nascimento" type="date" value={dataNascimento}
+                        onchange={handleChange} data-field="dataNascimento"></lightning-input>
+                    <lightning-input label="Email" type="email" value={email} onchange={handleChange}
+                        data-field="email"></lightning-input>
+                    <lightning-input label="Telefone" value={telefone} onchange={handleTelefoneChange}
+                        placeholder="(11) 99999-9999" maxlength="15">
                     </lightning-input>
                 </div>
 
                 <!-- Coluna 2 -->
                 <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
-                    
-                    <lightning-input label="CEP" value={cep} onchange={handleCepChange} data-field="cep"></lightning-input>
-                    <lightning-input label="Logradouro" value={logradouro} onchange={handleChange} data-field="logradouro" disabled class="readonly-input"></lightning-input>
-                    <lightning-input label="Número/Apartamento" value={numero} onchange={handleChange} data-field="numero"></lightning-input>
-                    <lightning-input label="Bairro" value={bairro} onchange={handleChange} data-field="bairro" disabled class="readonly-input"></lightning-input>
-                    <lightning-input label="Cidade" value={cidade} onchange={handleChange} data-field="cidade" disabled class="readonly-input"></lightning-input>
-                    <lightning-input label="Estado" value={estado} onchange={handleChange} data-field="estado" disabled class="readonly-input"></lightning-input>
+
+                    <lightning-input label="CEP" value={cep} onchange={handleCepChange}
+                        data-field="cep"></lightning-input>
+                    <lightning-input label="Logradouro" value={logradouro} onchange={handleChange}
+                        data-field="logradouro" disabled class="readonly-input"></lightning-input>
+                    <lightning-input label="Número/Apartamento" value={numero} onchange={handleChange}
+                        data-field="numero"></lightning-input>
+                    <lightning-input label="Bairro" value={bairro} onchange={handleChange} data-field="bairro" disabled
+                        class="readonly-input"></lightning-input>
+                    <lightning-input label="Cidade" value={cidade} onchange={handleChange} data-field="cidade" disabled
+                        class="readonly-input"></lightning-input>
+                    <lightning-input label="Estado" value={estado} onchange={handleChange} data-field="estado" disabled
+                        class="readonly-input"></lightning-input>
                 </div>
 
                 <!-- Campo de descrição em largura total -->
                 <div class="slds-col slds-size_1-of-1 slds-p-horizontal_small">
-                    <lightning-textarea
-                        label="Descrição"
-                        value={descricao}
-                        onchange={handleDescricaoChange}
+                    <lightning-textarea label="Descrição" value={descricao} onchange={handleDescricaoChange}
                         placeholder="Digite observações sobre o titular...">
                     </lightning-textarea>
                 </div>
@@ -57,98 +55,93 @@
 
             <div class="slds-m-top_medium slds-text-align_center">
                 <lightning-button label="Voltar" class="slds-m-left_small" onclick={resetTela}></lightning-button>
-                <lightning-button variant="brand" label="Escolher Plano" class="slds-m-left_small" onclick={handleAbrirTelaPlano}></lightning-button>                
+                <lightning-button variant="brand" label="Escolher Plano" class="slds-m-left_small"
+                    onclick={handleAbrirTelaPlano}></lightning-button>
             </div>
         </template>
 
         <template if:true={isAbrirTelaPlano}>
-         <lightning-card title="Escolher Plano de Saúde">
-            <div class="slds-p-around_medium">
-                 <lightning-combobox
-            name="tipoPlano"
-            label="Selecione o Plano"
-            value={selectedPlano}
-            options={planoOptions}
-            onchange={handlePlanoChange}>
-        </lightning-combobox>
+            <lightning-card title="Escolher Plano de Saúde">
+                <div class="slds-p-around_medium">
+                    <lightning-combobox name="tipoPlano" label="Selecione o Plano" value={selectedPlano}
+                        options={planoOptions} onchange={handlePlanoChange}>
+                    </lightning-combobox>
 
-        <template if:true={planoSelecionado}>
-            <div class="slds-m-top_medium">
-                <p><b>Mensalidade:</b> R$ {planoSelecionado.valorMensalidade}</p>
-                <p><b>Cobertura:</b> {planoSelecionado.cobertura}</p>
-                <p><b>Carência:</b> {planoSelecionado.carencia} dias</p>
-            </div>
+                    <template if:true={planoSelecionado}>
+                        <div class="slds-m-top_medium">
+                            <p><b>Mensalidade:</b> R$ {planoSelecionado.valorMensalidade}</p>
+                            <p><b>Cobertura:</b> {planoSelecionado.cobertura}</p>
+                            <p><b>Carência:</b> {planoSelecionado.carencia} dias</p>
+                        </div>
+                    </template>
+
+                    <div class="slds-m-top_medium slds-text-align_center">
+                        <lightning-button label="Voltar" onclick={handleVoltar}></lightning-button>
+                        <lightning-button variant="brand" label="Salvar" class="slds-m-left_small"
+                            onclick={salvarCliente}></lightning-button>
+                    </div>
+                </div>
+            </lightning-card>
         </template>
-
-            <div class="slds-m-top_medium slds-text-align_center">
-                <lightning-button label="Voltar" onclick={handleVoltar}></lightning-button>
-                <lightning-button variant="brand" label="Salvar" class="slds-m-left_small" onclick={salvarCliente}></lightning-button>
-            </div>
-        </div>
-    </lightning-card>
-</template>
 
         <!-- Etapa 2: Formulário Dependente -->
         <template if:true={isDependente}>
-            <div class="slds-grid slds-wrap slds-p-around_medium">
 
+            <div class="slds-grid slds-wrap slds-p-around_medium slds-grid_align-start">
                 <!-- Lookup -->
-                <div class="slds-col slds-size_1-of-1 slds-p-horizontal_small">
+                <div class="slds-col slds-size_1-of-1 slds-p-horizontal_small slds-text-align_left">                    
                     <lightning-record-edit-form object-api-name="Dependente__c">
-                        <lightning-input-field 
-                            field-name="Account__c"
+                        <lightning-input-field field-name="Account__c"
                             label="Selecionar Titular"
                             onchange={handleLookupChange}>
                         </lightning-input-field>
-                    </lightning-record-edit-form>
+                    </lightning-record-edit-form>                    
                 </div>
 
                 <!-- Coluna 1 -->
                 <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
-                    <lightning-input label="Nome" value={nome} onchange={handleChange} data-field="nome"></lightning-input>
-                     <lightning-input
-                        label="CPF"
-                        value={cpf}
-                        maxlength="11"
-                        onchange={handleCpfChange}
-                        data-field="cpf"
-                    ></lightning-input>
-                    <lightning-input label="Data de Nascimento" type="date" value={dataNascimento} onchange={handleChange} data-field="dataNascimento"></lightning-input>
-                     <lightning-input label="Email" type="email" value={email} onchange={handleChange} data-field="email"></lightning-input>
-                    <lightning-input
-                        label="Telefone"
-                        value={telefone}
-                        onchange={handleTelefoneChange}
-                        placeholder="(11) 99999-9999"
-                        maxlength="15">
+                    <lightning-input label="Nome" value={nome} onchange={handleChange}
+                        data-field="nome"></lightning-input>
+                    <lightning-input label="CPF" value={cpf} maxlength="11" onchange={handleCpfChange}
+                        data-field="cpf"></lightning-input>
+                    <lightning-input label="Data de Nascimento" type="date" value={dataNascimento}
+                        onchange={handleChange} data-field="dataNascimento"></lightning-input>
+                    <lightning-input label="Email" type="email" value={email} onchange={handleChange}
+                        data-field="email"></lightning-input>
+                    <lightning-input label="Telefone" value={telefone} onchange={handleTelefoneChange}
+                        placeholder="(11) 99999-9999" maxlength="15">
                     </lightning-input>
                 </div>
 
                 <!-- Coluna 2 -->
-                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small"> 
-                    <lightning-input label="CEP" value={cep} onchange={handleCepChange} data-field="cep"></lightning-input>
-                    <lightning-input label="Logradouro" value={logradouro} onchange={handleChange} data-field="logradouro" disabled class="readonly-input"></lightning-input>
-                    <lightning-input label="Número/Apartamento" value={numero} onchange={handleChange} data-field="numero"></lightning-input>
-                    <lightning-input label="Bairro" value={bairro} onchange={handleChange} data-field="bairro" disabled class="readonly-input"></lightning-input>
-                    <lightning-input label="Cidade" value={cidade} onchange={handleChange} data-field="cidade" disabled class="readonly-input"></lightning-input>
-                    <lightning-input label="Estado" value={estado} onchange={handleChange} data-field="estado" disabled class="readonly-input"></lightning-input>
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
+                    <lightning-input label="CEP" value={cep} onchange={handleCepChange}
+                        data-field="cep"></lightning-input>
+                    <lightning-input label="Logradouro" value={logradouro} onchange={handleChange}
+                        data-field="logradouro" disabled class="readonly-input"></lightning-input>
+                    <lightning-input label="Número/Apartamento" value={numero} onchange={handleChange}
+                        data-field="numero"></lightning-input>
+                    <lightning-input label="Bairro" value={bairro} onchange={handleChange} data-field="bairro" disabled
+                        class="readonly-input"></lightning-input>
+                    <lightning-input label="Cidade" value={cidade} onchange={handleChange} data-field="cidade" disabled
+                        class="readonly-input"></lightning-input>
+                    <lightning-input label="Estado" value={estado} onchange={handleChange} data-field="estado" disabled
+                        class="readonly-input"></lightning-input>
                 </div>
 
                 <!-- Campo de descrição -->
                 <div class="slds-col slds-size_1-of-1 slds-p-horizontal_small">
-                    <lightning-textarea
-                        label="Descrição"
-                        value={descricao}
-                        onchange={handleDescricaoChange}
+                    <lightning-textarea label="Descrição" value={descricao} onchange={handleDescricaoChange}
                         placeholder="Digite observações sobre o dependente...">
                     </lightning-textarea>
                 </div>
             </div>
 
             <div class="slds-m-top_medium slds-text-align_center">
-                <lightning-button variant="brand" label="Salvar Dependente" onclick={salvarDependente}></lightning-button>
+                <lightning-button variant="brand" label="Salvar Dependente"
+                    onclick={salvarDependente}></lightning-button>
                 <lightning-button label="Voltar" class="slds-m-left_small" onclick={resetTela}></lightning-button>
             </div>
-        </template> 
-    </lightning-card>    
+        </template>
+    </lightning-card>
 </template>
