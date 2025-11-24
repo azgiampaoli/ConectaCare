@@ -38,6 +38,7 @@ public with sharing class CadastroClienteController {
         acc.Description = descricao;
         acc.Active__c = 'yes';
         insert acc;
+
         PlanoSaude__c plano = new PlanoSaude__c();
         plano.Name = tipoPlano;
         plano.Valor__c = Decimal.valueOf(valorMensalidade);
@@ -45,6 +46,15 @@ public with sharing class CadastroClienteController {
         plano.Carencia__c =  Decimal.valueOf(carencia);
         plano.Account__c = acc.Id;
         insert plano;
+
+        Contact c = new Contact();
+        c.LastName = nome;       
+        c.Email = email;
+        c.Phone = telefone;
+        c.AccountId = acc.Id;
+        c.Description = 'Contato criado automaticamente para o titular.';
+        insert c;
+            System.debug('criacção contato: ' + c.Id);
         acc.SLA__c = plano.Name;
         update acc;
     }
@@ -74,5 +84,14 @@ public with sharing class CadastroClienteController {
         dep.Ativo__c = true;   
         dep.Plano_de_Saude__c = planoTitular.Name;     
         insert dep;   
+
+        Contact c = new Contact();
+        c.LastName = nome;        
+        c.Email = email;
+        c.Phone = telefone;
+        c.AccountId = accountId;
+        c.Description = 'Contato criado automaticamente para o dependente.';
+        insert c;
+        System.debug('criacção contato dependente: ' + c.Id);
     }
 }
