@@ -90,58 +90,61 @@ public with sharing class CaseController {
         if (accountId == null) {
             throw new AuraHandledException('ID da Conta/Dependente não informado.');
         }
-            Account acc = null;
-            Dependente__c dep  = null;
-            String sla = null;
-            Id accountIdStr = null;
-            String emailContato = null;
-            String telefoneContato = null;
-            String contatoNome = null;
-            Id bh = null;
+        Account acc = null;
+        Dependente__c dep  = null;
+        String sla = null;
+        Id accountIdStr = null;
+        String emailContato = null;
+        String telefoneContato = null;
+        String contatoNome = null;
+        Id bh = null;
+        Id ContactsId = null;
         
         try {
-                      
+            
             String prefix = accountId.getSObjectType().getDescribe().getKeyPrefix();
             if (prefix == Account.SObjectType.getDescribe().getKeyPrefix()){
                 System.debug('Entrei no if da Account');
+
                 acc = [SELECT Id, Name, Email__c, Telefone__c, SLA__c FROM Account WHERE Id = :accountId LIMIT 1];
+                List<Contact> contacts = [SELECT id,LastName, Name, email FROM Contact WHERE AccountId = :acc.Id  LIMIT 1];
+                Contact cc = contacts[0];
+
+               
+
+                ContactsId = cc.id;
                 sla = acc.SLA__c;
                 accountIdStr = acc.id;
-                emailContato = acc.email__c;
+                emailContato = cc.email;
                 telefoneContato = acc.Telefone__c;
-                contatoNome = acc.Name;
-                System.debug('acc>>' + acc);
+                contatoNome = cc.Name;
+
             }else if (prefix == Dependente__c.SObjectType.getDescribe().getKeyPrefix()) {
                 System.debug('Entrei no if do Dependente');
+
                 dep = [SELECT Id, Name, Email__c, Telefone__c,Account__c, Account__r.Id, Account__r.Name, Account__r.Email__c, Account__r.Telefone__c, Account__r.SLA__c FROM Dependente__c WHERE Id = :accountId LIMIT 1];
+                List<Contact> contacts = [SELECT id,LastName, Name, email FROM Contact WHERE AccountId = : dep.Account__c and LastName =: dep.Name  LIMIT 1];
+                Contact cc = contacts[0];
+                
+                ContactsId = cc.id;
                 accountIdStr = dep.Account__r.Id;
                 sla = dep.Account__r.SLA__c;
-                emailContato = dep.email__c;
+                emailContato = cc.Email;
                 telefoneContato = dep.Telefone__c;
-                contatoNome = dep.Name;
+                contatoNome = cc.Name;
             }else {
-                System.debug('Entrei no exception dos ifs');
                 throw new AuraHandledException('Nenhuma conta vinculada foi encontrada.');
             }
             
             // Buscar Business Hours
-           
-            System.debug('Antes do Business Hours ID: ');
+          
             BusinessHours bhs = [SELECT Id FROM BusinessHours WHERE IsDefault = true LIMIT 1];
             bh = bhs.id;
-            System.debug('Business Hours ID: ' + bh);
-            System.debug('ID>>' + accountIdStr);
-            System.debug('SLA>>' + sla);
-            // Definir prioridade conforme o plano
-            System.debug('Antes do priority');
+          
             String prioridade = 'Low';
             if (sla == 'Premium') prioridade = 'High';
             else if (sla == 'Gold') prioridade = 'Medium';
-            System.debug('priority: ' + prioridade);
-                       
-            System.debug('Contato Nome: ' + contatoNome + ' Email: ' + emailContato + ' Telefone: ' + telefoneContato);
-            System.debug('Account: ' + accountIdStr + ' Assunto: ' + assunto + ' Descricao: ' + descricao + ' TipoAtendimento: ' + tipoAtendimento);
-            System.debug('Prioridade: ' + prioridade + ' BusinessHoursId: ' + bh);
+          
             
             // Criar o caso
             Case novoCase = new Case();
@@ -155,14 +158,14 @@ public with sharing class CaseController {
             novoCase.BusinessHoursId = bh;
             novoCase.Priority = prioridade;
             novoCase.Contato__c = contatoNome;
-                  
+            novoCase.ContactId = ContactsId;
+            
             
             insert novoCase;
             return novoCase.Id;
-            System.debug('Case criado com ID: ' + novoCase.Id);
             
         } catch (Exception e) {
             throw new AuraHandledException('Erro ao criar o caso: ' + e.getMessage());
         }
-    }    
+    }
 }
