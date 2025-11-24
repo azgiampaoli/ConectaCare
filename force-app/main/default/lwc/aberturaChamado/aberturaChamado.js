@@ -1,5 +1,5 @@
 import { LightningElement, track, wire } from 'lwc';
-import buscarRegistrosApex from '@salesforce/apex/CaseController.buscarRegistros';
+import buscarRegistrosApex from '@salesforce/apex/BuscaClienteController.buscarRegistros';
 import criarCaseApex from '@salesforce/apex/CaseController.criarCase';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
 import TIPO_ATENDIMENTO_FIELD from '@salesforce/schema/Case.TipoAtendimento__c';
@@ -18,8 +18,7 @@ export default class ClienteSearch extends LightningElement {
     descricao = '';
     tipoAtendimento = '';
     opcoesTipo = [];
-    salvando = false; // spinner ao salvar
-
+    salvando = false;
     handleChange(event) {
         this.termo = event.target.value;
     }
@@ -43,10 +42,13 @@ export default class ClienteSearch extends LightningElement {
         try {
             const resultado = await buscarRegistrosApex({ termo: this.termo.trim() });
             if (Array.isArray(resultado) && resultado.length > 0) {
-                this.registros = resultado.map(item => {
+                const somenteClientes = resultado.filter(r =>
+                    r.objectApiName !== 'Case'
+                );
+                this.registros = somenteClientes.map(item => {
                     return {
                         Id: item.Id || '',
-                        AccountId: item.AccountId || '', // importante guardar
+                        AccountId: item.AccountId || '',
                         Nome: item.Nome || '',
                         Email: item.Email || '',
                         CPF: item.CPF || '',
@@ -73,24 +75,33 @@ export default class ClienteSearch extends LightningElement {
     }
 
     handleSelectItem(event) {
+        
         const index = event.currentTarget.dataset.index;
         const idx = parseInt(index, 10);
+        console.log('Evento de seleção disparado linha 81');
+        console.log('Index selecionado: ' + idx);
+        console.log('Registros atuais: ' + JSON.stringify(this.registros));
         if (isNaN(idx)) return;
 
         const selectedId = this.registros[idx].Id;
+        console.log('ID selecionado: ' + selectedId);
         this.selected = selectedId;
+        console.log('Evento de seleção disparado linha 86');        
 
         this.registros = this.registros.map(item => {
             return {
                 ...item,
-                isSelected: item.Id === selectedId
-            };
+                isSelected: item.Id === selectedId                
+            };         
+            
         });
         console.log('Selected item: ' + this.selected);
     }
 
     handleAbrirCaso(event) {
+        console.log('handle abrir o caso');
         const item = this.registros.find(r => r.Id === this.selected);
+        console.log('Selected item: abri case' + this.item);
         if (!item) return;
         this.clienteSelecionadoNome = item.Nome;
         this.showModal = true;
@@ -130,7 +141,6 @@ export default class ClienteSearch extends LightningElement {
         }
     }
 
-    // Handler do botão (mantive seu nome)
     handlecriarCaso(event) {
         this.criarCaso();
     }
@@ -141,12 +151,11 @@ export default class ClienteSearch extends LightningElement {
             return;
         }
 
-        // busca o registro selecionado e pega o AccountId (pode ser a própria conta ou a account do dependente)
-        //const registro = this.registros.find(r => r.Id === this.selected);
-        const accountId = this.selected;// fallback se necessário
-        
+        const registro = this.registros.find(r => r.Id === this.selected);
 
-        // validações mínimas
+        const accountId = registro.Id;
+        console.log('accountId selecionado para criar o caso:', accountId);
+
         if (!this.assunto || this.assunto.trim().length === 0) {
             this.showToast('Atenção', 'Preencha o assunto.', 'warning');
             return;
@@ -165,7 +174,7 @@ export default class ClienteSearch extends LightningElement {
 
             this.fecharModal();
             this.showToast('Sucesso', 'Caso criado com sucesso. ', 'success');
-        
+
 
         } catch (error) {
             console.error('Erro ao criar caso', error);
