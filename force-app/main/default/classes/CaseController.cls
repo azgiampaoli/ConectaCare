@@ -38,7 +38,7 @@ public with sharing class CaseController {
             }else if (prefix == Dependente__c.SObjectType.getDescribe().getKeyPrefix()) {
                 System.debug('Entrei no if do Dependente');
 
-                dep = [SELECT Id, Name, Email__c, Telefone__c,Account__c, Account__r.Id, Account__r.Name, Account__r.Email__c, Account__r.Telefone__c, Account__r.SLA__c FROM Dependente__c WHERE Id = :accountId LIMIT 1];
+                dep = [SELECT Id, Name, Email__c, Telefone__c, Account__c, Account__r.Id, Account__r.Name, Account__r.Email__c, Account__r.Telefone__c, Account__r.SLA__c FROM Dependente__c WHERE Id = :accountId LIMIT 1];
                 List<Contact> contacts = [SELECT id,LastName, Name, email FROM Contact WHERE AccountId = : dep.Account__c and LastName =: dep.Name  LIMIT 1];
                 Contact cc = contacts[0];
                 
@@ -70,7 +70,7 @@ public with sharing class CaseController {
             novoCase.Origin = 'Web';
             novoCase.TipoAtendimento__c = tipoAtendimento;
             novoCase.Email__c = emailContato;
-            novoCase.Telefone__c = telefoneContato;
+            novoCase.Telephone__c = telefoneContato;
             novoCase.BusinessHoursId = bh;
             novoCase.Priority = prioridade;
             novoCase.Contato__c = contatoNome;

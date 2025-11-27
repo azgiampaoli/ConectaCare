@@ -34,13 +34,10 @@ public with sharing class CaseTriggerHandler {
             if (c.AccountId != null && accMap.containsKey(c.AccountId)) {
 
                 String sla = accMap.get(c.AccountId).SLA__c;
-                System.debug('sla >>>>:'+ sla);
-                System.debug('entMap >>>>:'+ entMap.get(sla).Id);
 
                 if (sla != null && entMap.containsKey(sla)) {
                     c.EntitlementId = entMap.get(sla).Id;
                 }
-                System.debug('Case entitlement>>>:' + c.EntitlementId);
 
                 }
             }

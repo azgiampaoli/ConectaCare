@@ -20,7 +20,8 @@ export default class ClienteSearch extends LightningElement {
     opcoesTipo = [];
     salvando = false;
     handleChange(event) {
-        this.termo = event.target.value;
+        this.termo = event.target.value;        
+        this.buscarRegistros();
     }
 
     handleKeyUp(event) {
@@ -28,6 +29,10 @@ export default class ClienteSearch extends LightningElement {
             this.buscarRegistros();
         }
     }
+
+    get tipoAtendimentoValue() {
+    return this.tipoAtendimento || '';
+}
 
     async buscarRegistros() {
         this.mensagemErro = '';

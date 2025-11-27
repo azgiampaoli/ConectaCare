@@ -1,4 +1,4 @@
-public with sharing class BuscaClienteController {    
+public with sharing class BuscaClienteController {
     
     @AuraEnabled(cacheable=true)
     public static List<Map<String, Object>> buscarRegistros(String termo) {
@@ -22,6 +22,7 @@ public with sharing class BuscaClienteController {
                 'CPF' => acc.CPF__c,
                 'Tipo' => 'Titular',
                 'Telefone' => acc.Telefone__c,
+                'AccountId' => acc.Id,  
                 'objectApiName' => 'Account'
             });
         }
@@ -76,39 +77,54 @@ public with sharing class BuscaClienteController {
             }
         }
         
-        
-        
-        
         // BUSCA CASE
         
         for (Case c : [
-            SELECT Id, CaseNumber, Subject, Status,
-                   Account.Name, AccountId,
-                   Contact.Name, ContactId
-            FROM Case
-            WHERE CaseNumber LIKE :busca
-               OR Account.Name LIKE :busca
-               OR Contact.Name LIKE :busca
-            LIMIT 20
-        ]) {
+        SELECT Id, CaseNumber, Contato__c, Assunto__c, Status, Descricao__c,
+           TipoAtendimento__c, Email__c, Telephone__c, Entitlement.Name,
+           (SELECT MilestoneType.Name, TargetDate, StartDate, CompletionDate
+            FROM CaseMilestones
+            WHERE CompletionDate = NULL
+            LIMIT 1)
+    FROM Case
+    WHERE CaseNumber LIKE :busca
+       OR Contato__c LIKE :busca
+    LIMIT 10
+]) {
             
-            String nomeRelacionado = c.AccountId != null ? c.Account.Name :
-                c.ContactId != null ? c.Contact.Name :
-                'Sem Nome Relacionado';
-            
-            resultados.add(new Map<String, Object>{
+            Map<String, Object> registro = new Map<String, Object>{
                 'Id' => c.Id,
-                'NumeroCaso' => c.CaseNumber,
-                'Nome' => nomeRelacionado,
+                'CaseNumber' => c.CaseNumber,
+                'ContatoNome' => c.Contato__c,
+                'Assunto' => c.Assunto__c,
                 'Status' => c.Status,
-                'Assunto' => c.Subject,
-                'Tipo' => 'Case',
-                'AccountId' => c.AccountId,
-                'ContactId' => c.ContactId,
+                'Descricao' => c.Descricao__c,
+                'TipoAtendimento' => c.TipoAtendimento__c,
+                'Email' => c.Email__c,
+                'Telefone' => c.Telephone__c,
                 'objectApiName' => 'Case'
-            });
+            };
+            
+            registro.put('Entitlement', c.Entitlement != null ?
+            new Map<String, Object>{ 'Name' => c.Entitlement.Name } : null
+            );
+            
+            if (c.CaseMilestones != null && !c.CaseMilestones.isEmpty()) {
+                CaseMilestone m = c.CaseMilestones[0];
+                
+                registro.put('CaseMilestones', new List<Object>{
+                    new Map<String, Object>{
+                        'MilestoneName' => m.MilestoneType != null ? m.MilestoneType.Name : null,
+                        'TargetDate' => m.TargetDate,
+                        'CompletionDate' => m.CompletionDate
+                    }
+                });
+            } else {
+                registro.put('CaseMilestones', null);
+            }
+            
+            resultados.add(registro);
         }
-        
         return resultados;
     }
 }

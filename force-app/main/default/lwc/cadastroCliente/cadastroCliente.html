@@ -1,5 +1,5 @@
 <template>
-    <lightning-card title="Cadastro">
+   <lightning-card title="Cadastro" icon-name="standard:contact">
         <!-- Etapa 1: Escolher tipo -->
         <template if:false={tipoSelecionado}>
             <div class="slds-p-around_medium slds-align_absolute-center">
@@ -61,9 +61,9 @@
         </template>
 
         <template if:true={isAbrirTelaPlano}>
-            <lightning-card title="Escolher Plano de Saúde">
+            <lightning-card title="Escolher Plano de Saúde" icon-name="standard:member_period">
                 <div class="slds-p-around_medium">
-                    <lightning-combobox name="tipoPlano" label="Selecione o Plano" value={selectedPlano}
+                    <lightning-combobox name="tipoPlano" label="Selecione o Plano" value={selectedPlano} placeholder="Escolha o plano"
                         options={planoOptions} onchange={handlePlanoChange}>
                     </lightning-combobox>
 

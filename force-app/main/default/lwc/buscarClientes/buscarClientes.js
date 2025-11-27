@@ -14,7 +14,7 @@ export default class BuscaClientes extends LightningElement {
         { type: 'button', typeAttributes: { label: 'Selecionar', name: 'selecionar', variant: 'brand' } }
     ];
 
-        handleSearchChange(event) {
+    handleSearchChange(event) {
         this.searchTerm = event.target.value;
         if (this.searchTerm && this.searchTerm.length >= 2) {
             this.buscar();
@@ -26,7 +26,12 @@ export default class BuscaClientes extends LightningElement {
     async buscar() {
         try {
             const data = await buscarRegistros({ termo: this.searchTerm });
-            this.results = data;
+
+            const somenteClientes = data.filter(r =>
+                r.objectApiName !== 'Case'
+            );
+
+            this.results = somenteClientes;
         } catch (error) {
             console.error('Erro na busca', error);
         }
