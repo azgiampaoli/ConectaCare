@@ -17,11 +17,10 @@ public with sharing class CaseController {
         Id ContactsId = null;
         
         try {
-            
+             // Identifica o tipo de SObject analisando o prefixo do ID
             String prefix = accountId.getSObjectType().getDescribe().getKeyPrefix();
             if (prefix == Account.SObjectType.getDescribe().getKeyPrefix()){
-                System.debug('Entrei no if da Account');
-
+                
                 acc = [SELECT Id, Name, Email__c, Telefone__c, SLA__c FROM Account WHERE Id = :accountId LIMIT 1];
                 List<Contact> contacts = [SELECT id,LastName, Name, email FROM Contact WHERE AccountId = :acc.Id  LIMIT 1];
                 Contact cc = contacts[0];
@@ -36,8 +35,7 @@ public with sharing class CaseController {
                 contatoNome = cc.Name;
 
             }else if (prefix == Dependente__c.SObjectType.getDescribe().getKeyPrefix()) {
-                System.debug('Entrei no if do Dependente');
-
+                
                 dep = [SELECT Id, Name, Email__c, Telefone__c,Account__c, Account__r.Id, Account__r.Name, Account__r.Email__c, Account__r.Telefone__c, Account__r.SLA__c FROM Dependente__c WHERE Id = :accountId LIMIT 1];
                 List<Contact> contacts = [SELECT id,LastName, Name, email FROM Contact WHERE AccountId = : dep.Account__c and LastName =: dep.Name  LIMIT 1];
                 Contact cc = contacts[0];
@@ -56,7 +54,7 @@ public with sharing class CaseController {
           
             BusinessHours bhs = [SELECT Id FROM BusinessHours WHERE IsDefault = true LIMIT 1];
             bh = bhs.id;
-          
+            // Definir prioridade com base no SLA
             String prioridade = 'Low';
             if (sla == 'Premium') prioridade = 'High';
             else if (sla == 'Gold') prioridade = 'Medium';

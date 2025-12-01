@@ -54,7 +54,6 @@ public with sharing class CadastroClienteController {
         c.AccountId = acc.Id;
         c.Description = 'Contato criado automaticamente para o titular.';
         insert c;
-            System.debug('criacção contato: ' + c.Id);
         acc.SLA__c = plano.Name;
         update acc;
     }
@@ -92,6 +91,6 @@ public with sharing class CadastroClienteController {
         c.AccountId = accountId;
         c.Description = 'Contato criado automaticamente para o dependente.';
         insert c;
-        System.debug('criacção contato dependente: ' + c.Id);
+        
     }
 }
