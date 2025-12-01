@@ -19,10 +19,12 @@ export default class ClienteSearch extends LightningElement {
     tipoAtendimento = '';
     opcoesTipo = [];
     salvando = false;
+
+    // Atualiza termo de busca conforme o usuário digita
     handleChange(event) {
         this.termo = event.target.value;
     }
-
+    
     handleKeyUp(event) {
         if (event.key === 'Enter') {
             this.buscarRegistros();
@@ -106,7 +108,7 @@ export default class ClienteSearch extends LightningElement {
         this.clienteSelecionadoNome = item.Nome;
         this.showModal = true;
     }
-
+    // Fecha modal e limpa campos
     fecharModal() {
         this.showModal = false;
         this.assunto = '';
@@ -126,6 +128,7 @@ export default class ClienteSearch extends LightningElement {
         this.tipoAtendimento = event.target.value;
     }
 
+    
     @wire(getObjectInfo, { objectApiName: CASE_OBJECT })
     objectInfo;
 

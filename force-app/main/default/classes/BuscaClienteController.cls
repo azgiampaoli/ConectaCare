@@ -15,6 +15,7 @@ public with sharing class BuscaClienteController {
             WHERE Name LIKE :busca OR CPF__c LIKE :busca
             LIMIT 20
         ]) {
+            //Mapeia os valores que desejo retornar
             resultados.add(new Map<String, Object>{
                 'Id' => acc.Id,
                 'Nome' => acc.Name,
@@ -34,6 +35,7 @@ public with sharing class BuscaClienteController {
             WHERE Name LIKE :busca OR CPF__c LIKE :busca
             LIMIT 20
         ]) {
+            //Mapeia os valores que desejo retornar
             resultados.add(new Map<String, Object>{
                 'Id' => dep.Id,
                 'Nome' => dep.Name,
@@ -55,7 +57,8 @@ public with sharing class BuscaClienteController {
         if (!accountIds.isEmpty()) {
             Map<Id, PlanoSaude__c> planosPorAccount = new Map<Id, PlanoSaude__c>();
             
-            for (PlanoSaude__c plano : [
+        //Plano de Saude por Account
+        for (PlanoSaude__c plano : [
         SELECT Id, Name, Account__c, Cobertura__c, DataVencimento__c, StatusPlano__c
         FROM PlanoSaude__c 
         WHERE Account__c IN :accountIds
@@ -77,11 +80,10 @@ public with sharing class BuscaClienteController {
         }
         
         
-        
-        
         // BUSCA CASE
         
         for (Case c : [
+
             SELECT Id, CaseNumber, Subject, Status,
                    Account.Name, AccountId,
                    Contact.Name, ContactId
@@ -97,6 +99,21 @@ public with sharing class BuscaClienteController {
                 'Sem Nome Relacionado';
             
             resultados.add(new Map<String, Object>{
+
+        SELECT Id, CaseNumber, Contato__c, Assunto__c, Status, Descricao__c,
+           TipoAtendimento__c, Email__c, Telephone__c, Entitlement.Name,
+           (SELECT MilestoneType.Name, TargetDate, StartDate, CompletionDate
+            FROM CaseMilestones
+            WHERE CompletionDate = NULL
+            LIMIT 1)
+    FROM Case
+    WHERE CaseNumber LIKE :busca
+       OR Contato__c LIKE :busca
+    LIMIT 10
+]) {
+            //Mapeia os valores que desejo retornar
+            Map<String, Object> registro = new Map<String, Object>{
+
                 'Id' => c.Id,
                 'NumeroCaso' => c.CaseNumber,
                 'Nome' => nomeRelacionado,
@@ -106,7 +123,31 @@ public with sharing class BuscaClienteController {
                 'AccountId' => c.AccountId,
                 'ContactId' => c.ContactId,
                 'objectApiName' => 'Case'
+
             });
+
+            };
+            
+            registro.put('Entitlement', c.Entitlement != null ?
+            new Map<String, Object>{ 'Name' => c.Entitlement.Name } : null
+            );
+            
+            if (c.CaseMilestones != null && !c.CaseMilestones.isEmpty()) {
+                CaseMilestone m = c.CaseMilestones[0];
+                //Mapeia os valores que desejo retornar
+                registro.put('CaseMilestones', new List<Object>{
+                    new Map<String, Object>{
+                        'MilestoneName' => m.MilestoneType != null ? m.MilestoneType.Name : null,
+                        'TargetDate' => m.TargetDate,
+                        'CompletionDate' => m.CompletionDate
+                    }
+                });
+            } else {
+                registro.put('CaseMilestones', null);
+            }
+            
+            resultados.add(registro);
+
         }
         
         return resultados;

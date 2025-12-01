@@ -10,7 +10,6 @@ public with sharing class SLAEmailService {
     public static void handleAfterInsert(List<Case> newCases) {
         
         for (Case c : newCases) {
-            
             // evento PRIMEIRA RESPOSTA
             sendEmailUsingTemplate(c, TEMPLATE_PRIMEIRA_RESPOSTA);
         }
@@ -21,12 +20,9 @@ public with sharing class SLAEmailService {
         for (Case newC : newCases) {
             
             Case oldC = oldMap.get(newC.Id);
-            
+            //Verifica transições de status e violações de SLA para decidir quais templates devem ser enviados.
             if (newC.Status == 'Em Atendimento' || newC.Status == 'Working' && oldC.Status != 'Em Atendimento' && oldC.Status != 'Working') {
                 sendEmailUsingTemplate(newC, TEMPLATE_EM_ATENDIMENTO);
-                System.debug('passou pelo if do email Em Atendimento');
-                System.debug('Status oldC: ' + oldC.Status);
-                System.debug('Status newC: ' + newC.Status);
             }
             
             if ( (newC.Status == 'Finalizado' || newC.Status == 'Closed')
@@ -41,16 +37,15 @@ public with sharing class SLAEmailService {
         }
     }
     
-    
+    // metodo para o envio de email com template
     private static void sendEmailUsingTemplate(Case c, String templateDevName) {
         
+        // Evita erros em testes que não possuem e-mail ativo.
         if (Test.isRunningTest()) {
             return;
-        }
-        
+        }     
         
         EmailTemplate template = [SELECT Id, name  FROM EmailTemplate where name = :templateDevName LIMIT 1];
-        System.debug('Email template:' + template);
         
         Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
         mail.setTemplateId(template.Id);

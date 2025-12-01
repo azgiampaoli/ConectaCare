@@ -1,5 +1,104 @@
 <template>
-    <lightning-card title="Listar e Atualizar Chamados">
-        <p class="slds-p-around_medium">Aqui vai a listagem e atualização de chamados.</p>
+
+    <lightning-card title="Listar e Atualizar Chamados" icon-name="standard:related_list">
+
+
+        <div class="slds-p-around_medium">
+
+            <!-- CAMPO DE BUSCA -->
+            <lightning-input type="search" label="Buscar por nome ou Número do caso" value={searchTerm}
+                onchange={handleSearchChange}>
+            </lightning-input>
+        </div>
+
+        <!-- LISTA DE RESULTADOS -->
+        <template if:true={resultados}>
+            <template for:each={descricaoLista} for:item="item">
+                <div key={item.Id} class="slds-box slds-m-around_medium slds-grid slds-wrap">
+
+                    <!-- COLUNA ESQUERDA -->
+                    <div class="slds-size_1-of-3 slds-p-right_small">
+                        <p><b>Número:</b> {item.CaseNumber}</p>
+                        <p><b>Contato:</b> {item.ContatoNome}</p>
+                        <p><b>Tipo de Atendimento:</b> {item.TipoAtendimento}</p>
+                        <p><b>Assunto:</b> {item.Assunto}</p>
+                        <p><b>Status:</b> {item.Status}</p>
+                        <p><b>Telefone:</b> {item.Telefone}</p>
+                        <p><b>Email:</b> {item.Email}</p>
+
+                        <p><b>Descrição</b></p>
+                        <p>{item.Descricao}</p>
+
+                        <lightning-button label="Acompanhar" data-id={item.Id} onclick={handleabrirModal}
+                            class="slds-m-top_small" variant="brand">
+                        </lightning-button>
+                    </div>
+
+                    <!-- COLUNA DIREITA (ENTITLEMENT + SLA) -->
+                    <div class="slds-size_2-of-3 slds-p-left_small slds-text-align_center">
+
+                        <p><b>Entitlement:</b></p>
+                        <p>{item.entitlementName}</p>
+
+                        <div class="slds-m-top_medium">
+                            <p><b>Target Date:</b></p>
+                            <p>{item.targetDateFormatted}</p>
+                        </div>
+
+                        <div class="slds-m-top_medium">
+                            <p><b>Time Remaining:</b></p>
+
+                            <!-- AQUI A COR DINÂMICA -->
+                            <p style={item.timeColor}>{item.timeRemaining}</p>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </template>
+        </template>
     </lightning-card>
+
+    <!-- MODAL -->
+    <template if:true={modalAberto}>
+        <section role="dialog" class="custom-modal-backdrop">
+            <div class="custom-modal">
+
+                <h2 class="custom-title">Detalhes do Caso</h2>
+
+                <div class="custom-body">
+                    <lightning-input label="Assunto" value={caseDetalhes.Assunto__c} disabled>
+                    </lightning-input>
+
+                    <lightning-input label="Status Atual" value={caseDetalhes.Status} disabled>
+                    </lightning-input>
+
+                    <lightning-input label="Telefone" type="text" value={novoTelefone} data-field="Telefone"
+                        onchange={handleTelefoneChange}>
+                    </lightning-input>
+
+                    <lightning-input label="Email" type="email" value={caseDetalhes.Email__c}
+                        onchange={handleEmailChange}>
+                    </lightning-input>
+
+                    <lightning-combobox label="Alterar Status" value={novoStatus} options={statusOptions}
+                        onchange={handleStatusChange}>
+                    </lightning-combobox>
+
+                    <lightning-textarea label="Descrição" type="text" value={novaDescricao}
+                        onchange={handleDescricaoChange}>
+                    </lightning-textarea>
+
+                </div>
+
+                <div class="custom-footer">
+                    <button class="cancelar" onclick={fecharModal}>Cancelar</button>
+                    <button class="confirmar" onclick={salvarCase}>Salvar</button>
+                </div>
+
+            </div>
+        </section>
+    </template>
+
 </template>
